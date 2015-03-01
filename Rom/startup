@@ -1,0 +1,54 @@
+
+local sPath = ".:/Rom/programs"
+if turtle then
+	sPath = sPath..":/Rom/programs/turtle"
+else
+	sPath = sPath..":/Rom/programs/computer"
+end
+if http then
+	sPath = sPath..":/Rom/programs/http"
+end
+if term.isColor() then
+	sPath = sPath..":/Rom/programs/color"
+end
+
+shell.setPath( sPath )
+help.setPath( "/rom/help" )
+
+shell.setAlias( "ls", "list" )
+shell.setAlias( "dir", "list" )
+shell.setAlias( "cp", "copy" )
+shell.setAlias( "mv", "move" )
+shell.setAlias( "rm", "delete" )
+shell.setAlias( "rom", "Rom" )
+shell.setAlias( "newacc","/C/BombOS/newacc.sys/sysfunc.data")
+shell.setAlias( "fb","/C/BombOS/FileBrowser")
+
+
+	local tFiles = fs.list( "/C/BombOS/APIS.bin" )
+	table.sort( tFiles )
+	for n, sFile in ipairs( tFiles ) do
+		if string.sub( sFile, 1, 1 ) ~= "." then
+			local sPath = "/C/BombOS/APIS.bin/"..sFile
+			if not fs.isDir( sPath ) then
+				print("Initializing "..sFile.." API.")
+    os.loadAPI(sPath)
+    sleep(.5)
+			end
+		end
+	end
+ local tFiles = fs.list("/Rom/autorun")
+ table.sort(tFiles)
+ for n,sFile in ipairs(tFiles) do
+   if string.sub(sFile,1,1)~="." then
+     local sPath="/Rom/autorun/"..sFile
+     if not fs.isDir(sPath) then
+       shell.run(sPath)
+     end
+   end
+ end
+ 
+ 
+ 
+ 
+

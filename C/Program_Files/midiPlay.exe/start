@@ -1,0 +1,35 @@
+midi.start("top")
+shell.run("clear")
+term.setTextColor(32768)
+term.setBackgroundColor(1)
+print(" X X  X X X  X X  X X X ")
+term.setBackgroundColor(2)
+print("Beat                    ")
+term.setBackgroundColor(4)
+print("Snare                   ")
+term.setBackgroundColor(8)
+print("Click                   ")
+term.setBackgroundColor(16)
+write("Bass                    ")
+parallel.waitForAll(
+function()
+while true do
+event,button,note,x=os.pullEvent()
+if event=="mouse_click" or event=="mouse_drag" or event=="monitor_touch" then
+inst=x-1
+if inst<5 and note<25 then
+midi.playNote({inst,note})
+term.setCursorPos(1,7)
+print(inst.."  ")
+print(note.." ")
+end
+end
+end
+end,
+function()
+while 1==1 do
+midi.playNote(1,0)
+sleep(.4)
+end
+end
+)

@@ -1,0 +1,22 @@
+shell.run("clear")
+peripheral.wrap("left")
+while true do
+event,a,b,c,d,e = os.pullEvent()
+if event == "mouse_click" then
+shell.run("clear")
+term.setCursorPos(b,c)
+write("X")
+end
+if event == "mouse_drag" then
+term.setCursorPos(b,c)
+write("0")
+
+end
+
+
+term.setCursorPos(1,1)
+print(event.."          ")
+print(tostring(a).."    ")
+print(tostring(b).."    ")
+print(tostring(c).."    ")
+end

@@ -1,0 +1,147 @@
+local sVars = {...}
+function version()
+return 2.22
+end
+--Install--
+if fs.exists("/midi") then
+if tostring(fs.exists("/API"))=="false" then
+shell.run("mkdir","/API")
+end
+if tostring(fs.exists("/API/midi"))=="false" then
+shell.run("move","/midi","/API/midi")
+file = fs.open("/midi","w")
+file.writeLine("--MIDI START--")
+file.writeLine('os.loadAPI("/API/midi")')
+file.writeLine('shell.run("/API/midi")')
+file.writeLine('shell.run("alias","/midi","/API/midi")')
+file.writeLine('shell.run("/API/midi")')
+file.writeLine('shell.run("/midi","update")')
+file.writeLine('--MIDI END--')
+file.close()
+os.reboot()
+end
+end
+if sVars[1] == "update" then
+update()
+end
+if sVars[1]=="version" then
+print(version())
+end
+
+--Install End--
+--TO PLAY/READ MIDI FILES--
+--[[
+API created by Bombitmanbomb on ftb.bedcraft.eu
+This api may be used in any public program
+you May not claim this as your own
+API Created: 1/25/2015 at 1:18am EST
+no multinote support yet (working on it though)
+]]--
+function update()
+print("Downloading Latest Version of\nbombitmanbomb's MIDI api\n")
+
+shell.run("cd","/")
+shell.run("pastebin","get","gpwY1mYH","/midiTemp")
+print("Checking Versions")
+os.loadAPI("/API/midi")
+Cver=midi.version()
+os.loadAPI("midiTemp")
+Nver=midiTemp.version()
+if Nver>Cver then
+shell.run("delete","/API/midi")
+shell.run("delete","/midi")
+shell.run("rename","/midiTemp","/midi")
+print("Updated to Version "..Nver)
+os.unloadAPI("midi")
+shell.run("alias","midi")
+else
+print("Using Latest Version: v"..Cver)
+shell.run("delete","/midiTemp")
+end
+
+end
+
+function start(side)
+local a = peripheral.isPresent(side)
+local b = peripheral.getType(side)
+if tostring(a) == "true" and b == "note" then
+mNote = peripheral.wrap(side)
+MidiInit="true"
+return true
+else
+error('no Midi device detected on side "'..side..'"')
+return false
+end
+end
+function load(dir)
+if type(dir) == "table" then
+if tostring(dir.isMidi) == "nil" then
+error("failed to load")
+return false
+end
+tempValaxCyV = dir.settings.tempo
+return var
+end
+local a = fs.exists(dir)
+local b = string.find(dir,".mid",-4)
+if tostring(a)~="true" then
+error(dir.." Not Found!")
+return false
+end
+if tostring(b)=="nil" then
+error("Selected File is not a .mid file!")
+return false
+end
+ 
+  local tData = {}
+  local file = fs.open(dir,"r")
+  local sData = file.readAll()
+  local tData = textutils.unserialize(sData)
+  if type(tData) ~= "table" then
+  error("Problem loading "..dir..". File might not be a .mid file or may be corrupted.")
+  return false
+  end
+  if tostring(tData.isMidi[1]) == "nil" then
+  error("File could not be read!")
+  return false  
+  end
+  tempValaxCyV = tData.settings.tempo
+  return tData
+end
+function save(dir,tempo,name,DATA)
+if type(DATA) ~= "table" then
+error("Could Not Read Song Data")
+return false
+end
+local tData = {}
+tData.song = {}
+tData.settings = {}
+tData.song = DATA
+tData.settings.tempo = tempo
+tData.settings.name = name
+tData.isMidi = 1
+if dir ~= "var" then
+file = fs.open(var..".mid","w")
+Song = textutils.serialize(tData)
+file.writeLine(song)
+file.close()
+end
+return tData
+end
+function playNote(nDat)
+if tostring(MidiInit) == "nil" then
+error("MIDI has not been Initialized!")
+return false
+end
+if type(nDat) == "table" then
+mNote.playNote(nDat[1],nDat[2])
+elseif nDat=="pause" then
+pause()
+end
+end
+function pause()
+if tostring(tempValaxCyV) == "nil" then
+error("No Song Loaded!")
+end
+wait(tempValaxCyV)
+end

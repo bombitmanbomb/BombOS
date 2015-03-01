@@ -1,0 +1,7 @@
+--MIDI START--
+os.loadAPI("/API/midi")
+shell.run("/API/midi")
+shell.run("alias","/midi","/API/midi")
+shell.run("/API/midi")
+shell.run("/midi","update")
+--MIDI END--

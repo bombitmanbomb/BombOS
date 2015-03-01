@@ -1,0 +1,150 @@
+function blueBack()
+term.setBackgroundColor(8)
+term.clear()
+end
+
+function bootup()
+term.setBackgroundColor(8)
+term.clear()
+sleep(3)
+term.setBackgroundColor(256)
+for x = 7,11 do
+sleep(0.01)
+term.setCursorPos(18,x)
+write("                ")
+end
+sleep(.5)
+term.setCursorPos(19,8)
+textutils.slowWrite("Welcome to the")
+term.setCursorPos(23,9)
+textutils.slowWrite("Future")
+sleep(1)
+term.setCursorPos(23,10)
+term.setTextColor(16)
+term.setBackgroundColor(128)
+textutils.slowWrite("BombOS")
+term.setBackgroundColor(256)
+term.setTextColor(1)
+sleep(3)
+end
+function bootwindow()
+term.setBackgroundColor(256)
+for x=13,5,-1 do
+term.setCursorPos(16,x)
+write("                     ")
+end
+end
+function newacc()
+term.setCursorPos(21,6)
+term.setBackgroundColor(256)
+term.setTextColor(1)
+write("New Account")
+sleep(0.01)
+term.setCursorPos(16,12)
+write("*")
+term.setTextColor(32768)
+term.setBackgroundColor(1)
+term.setCursorPos(17,8)
+sleep(0.01)
+write("Username:          ")
+term.setCursorPos(17,10)
+sleep(0.01)
+write("Password:          ")
+term.setCursorPos(17,12)
+sleep(0.01)
+write("Password:          ")
+term.setCursorPos(26,8)
+username=read()
+term.setCursorPos(26,10)
+passa=read("*")
+term.setCursorPos(26,12)
+passb=read("*")
+sPath=shell.dir()
+shell.setDir("/")
+if passa==passb then
+if fs.exists("C/Users/"..username..".usr")==false then
+shell.setDir("C/Users")
+shell.run("copy","Default.usr",username..".usr")
+shell.setDir("C/Users/"..username..".usr/AppData/Local")
+file = fs.open("/C/Users/"..username..".usr/AppData/Local/account","w")
+
+file.writeLine(passa)
+file.close()
+else
+error("USER ALREADY EXISTS")
+end
+end
+
+
+end
+function plogin()
+term.setBackgroundColor(256)
+term.setCursorPos(24,6)
+term.setTextColor(1)
+write("LOGIN")
+term.setTextColor(32768)
+term.setBackgroundColor(1)
+login=false
+while login==false do
+term.setCursorPos(17,8)
+write("Username:          ")
+term.setCursorPos(17,10)
+write("Password:          ")
+term.setCursorPos(26,8)
+user=read()
+term.setCursorPos(26,10)
+pass=read("*")
+sPath=shell.dir()
+shell.setPath("/")
+if fs.exists("/C/Users/"..user..".usr") then
+shell.setPath("/C/Users/"..user..".usr/AppData/Local")
+file=fs.open("/C/Users/"..user..".usr/AppData/Local/account","r")
+password=file.readLine()
+file.close()
+if pass==password then
+login=true
+SysUsr=user
+term.setCursorPos(17,12)
+write("Welcome "..user)
+sleep(5)
+USERPATH = "/C/Users/"..user..".usr"
+shell.run("/C/BombOS/rom")
+shell.run("/C/BombOS/setSettings")
+shell.run("cd","/C")
+USERNAME=user
+APPDATA=USERPATH.."/AppData"
+DESKTOP=USERPATH.."/Desktop"
+RECYCLEBIN=DESKTOP.."/Recycle_Bin.sys"
+DOWNLOADS=USERPATH.."/Downloads"
+DOCUMENTS=USERPATH.."/Documents"
+shell.run("cd",USERPATH)
+--print("YES")
+--sleep(5)
+shell.run("/C/BombOS/FileBrowser")
+else
+term.setCursorPos(17,12)
+write("Invalid Login!")
+
+end
+else
+term.setCursorPos(17,12)
+write("Invalid Login!")
+end
+
+
+end
+end
+--BEGIN--
+bootup()
+bootwindow()
+tUsers = {}
+tUsers = fs.list("C/Users")
+if #tUsers>1 then
+plogin()
+else
+bootwindow()
+newacc()
+
+bootwindow()
+plogin()
+end

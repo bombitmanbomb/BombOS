@@ -1,0 +1,6 @@
+shell.run("clear")
+print("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n                  Loading BombOS")
+term.setBackgroundColor(256)
+textutils.slowWrite("                                                   ",15)
+term.setBackgroundColor(32768)
+term.setCursorPos(1,1)

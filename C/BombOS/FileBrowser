@@ -1,0 +1,386 @@
+tArgs={...}
+HEADER="BombOS File Browser v3.1"
+function input(message)
+screen()
+bootwindow(1)
+mps = middle(message)
+term.setCursorPos(mps,5)
+write(message)
+term.setCursorPos(17,9)
+term.setBackgroundColor(1)
+
+write("                   ")
+term.setCursorPos(17,9)
+msg=read()
+key=bkey
+return msg
+
+end
+function middle(message)
+local len = string.len(message)
+local half = 1/2
+local posi = 27-half*len
+return posi
+end
+
+
+function Window(message,opa,opb,opc,opd,ope,opf)
+
+
+
+bootwindow()
+if message~=nil then
+posi = middle(message)
+term.setTextColor(32678)
+term.setCursorPos(posi,5)
+write(message)
+else
+term.setTextColor(32768)
+term.setCursorPos(16,5)
+write("        Window       ")
+end
+term.setCursorPos(16,6)
+write("---------------------")
+if opa ~= nil then
+opam=middle(opa)
+term.setCursorPos(opam,7)
+write(opa)
+end
+if opb ~= nil then
+opbm=middle(opb)
+term.setCursorPos(opbm,8)
+write(opb)
+end
+if opc ~= nil then
+opcm=middle(opc)
+term.setCursorPos(opcm,9)
+write(opc)
+end
+if opd ~= nil then
+opdm=middle(opd)
+term.setCursorPos(opdm,10)
+write(opd)
+end
+if ope ~= nil then
+opem=middle(ope)
+term.setCursorPos(opem,11)
+write(ope)
+end
+if opf~= nil then
+opfm=middle(opf)
+term.setCursorPos(opfm,12)
+write(opf)
+end
+run=true
+while run==true do
+event,key,x,y = os.pullEvent()
+if event=="mouse_click" then
+if y>=7 and y<=12 and x>=16 and x<=36 then
+Value = y-6
+key=bkey
+return tostring(Value)
+end
+end
+end
+
+
+
+end
+
+
+
+function getKey()
+x=0
+y=0
+event,key,x,y = os.pullEvent()
+
+if event=="key" or tostring(x)=="nil" then
+x=0
+y=0
+end
+
+if event == "mouse_click" or event=="mouse_scroll" or event=="char" or event == "key" or event=="monitor_touch" then
+return {key,x,y,event}
+else
+return {"NIL","NIL","NIL","NIL"}
+end
+
+end
+function gDir()
+return shell.dir()
+end
+local function items()
+local a={}
+a = fs.list(shell.dir())
+table.sort(a)
+return a
+end
+function screen()
+local sDir = {}
+sDir = gDir()
+term.setBackgroundColor(1)
+term.clear()
+term.setCursorPos(1,1)
+term.setBackgroundColor(8)
+term.setTextColor(1)
+write("                                               ")
+term.setBackgroundColor(2048)
+write("-[]")
+term.setBackgroundColor(16384)
+write("X")
+term.setBackgroundColor(8)
+term.setCursorPos(1,1)
+write(HEADER)
+term.setBackgroundColor(256)
+term.setCursorPos(1,2)
+term.setBackgroundColor(256)
+term.setTextColor(32768)
+write("                                                   ")
+term.setCursorPos(1,2)
+if string.find(sDir,".exe") 
+then
+term.write("Editing an Executable ")
+a,b=string.find(sDir,".exe")
+exfle=string.sub(sDir,b+2)
+write(exfle)
+else
+term.write(sDir.."/")
+end
+term.setCursorPos(1,3)
+term.setBackgroundColor(1)
+dir = items()
+sDir = gDir()
+if sDir == "C" or sDir== "D" or sDir=="My_Computer" then
+print("  ")
+elseif string.find(sDir,".exe",-4) then
+print("**Save And Exit**")
+else
+print("..")
+end
+for a = 1,#dir do
+term.setTextColor(32768)
+if fs.isDir(sDir.."/"..dir[a]) then
+if string.find(dir[a],".exe",-4) then
+term.setBackgroundColor(32)
+write("*")
+elseif string.find(dir[a],".lnk",-4) then
+term.setBackgroundColor(512)
+write("+")
+elseif string.find(dir[a],".sys",-4) then
+term.setBackgroundColor(4)
+write("$")
+elseif string.find(dir[a],".usr",-4) then
+term.setTextColor(16384)
+write("%")
+elseif string.find(dir[a],".bin",-4) then
+term.setBackgroundColor(2)
+write("{}")
+else
+term.setBackgroundColor(16)
+write("[]")
+end
+end
+if string.find(dir[a],".lnk",-4) or string.find(dir[a],".exe",-4) or string.find(dir[a],".sys",-4) or string.find(dir[a],".usr",-4) or string.find(dir[a],".bin",-4)
+then
+tempfilename = tostring(dir[a])
+tempfilesize = string.len(tempfilename)-4
+tempname=string.sub(tempfilename,1,tempfilesize)
+write(tempname)
+elseif string.find(dir[a],".data",-5) then
+tempfilename = tostring(dir[a])
+tempfilesize = string.len(tempfilename)-5
+tempname=string.sub(tempfilename,1,tempfilesize)
+term.setTextColor(64)
+write("!"..tempname)
+
+else
+write(tostring(dir[a]))
+end
+term.setBackgroundColor(1)
+term.setTextColor(32768)
+write("\n")
+end
+term.setCursorPos(1,19)
+term.setBackgroundColor(2048)
+write("Connected to LAN                                   ")
+term.setBackgroundColor(1)
+end
+if tostring(tArgs[1])=="init" then
+return
+end
+
+run=true
+while run==true do
+screen()
+tItems = items()
+key = getKey()
+bkey={}
+bkey=key
+local sDir = gDir()
+if key[4]=="char" then
+  if key[1]==" " then 
+  shell.run("cd",USERPATH)
+  end
+end
+
+if key[4]=="mouse_click" or key[4]=="key" then
+  if key[3]==3 then
+   if sDir ~= "C" and sDir~="D" and sDir~="My_Computer" then
+   shell.run("cd","..")
+   end  
+  end
+  if key[3]==1 and key[2]==51 then
+  m = Window("Exit?","*Yes*","*No*")
+  if m=="1" then
+  run=false
+  shell.run("clear")
+  return
+  end
+  key=bkey
+  end
+  if key[3] > 3 or key[4]=="key" then
+   num = key[3]
+   num=num-3
+    if key[1]==3 or key[1]==29 then--NEW FILE/FOLDER/IMG/ETC.
+    m = Window("Commands","*New File*","*New Folder*","*Download*","*d*","*e*","*Cancel*")
+     --
+     if m=="1" then
+     name=input("File Name")
+      if fs.exists(sDir.."/"..name)==false then
+      file=fs.open(sDir.."/"..name,"w")
+      file.close()
+      else
+      Window("File Already Exists!","OK")
+      end
+     end
+     --
+     if m=="2" then
+     name=input("Folder Name")
+      if fs.exists(sDir.."/"..name)==false then
+      ldir = sDir.."/"..name
+      shell.run("mkdir",name)
+      else
+      Window("Folder/File Exists!","OK")
+      end
+     end
+     if m=="3" then
+     name=input("File Name")
+     shell.run("/C/BombOS/download",name,"CdIr")
+     end
+    
+    
+    key=bkey
+    
+    
+    end
+    
+  
+  
+  
+  
+  
+  
+  
+      if num <= #tItems then
+       if key[1]==1 then
+        if fs.isDir("/"..sDir.."/"..tItems[num]) then
+         shell.run("cd",tItems[num])
+         if string.find(tItems[num],".exe",-4) then
+         if fs.exists("/"..sDir.."/"..tItems[num].."/OfcPrgm") then
+         fDir=gDir()
+         shell.run("start")
+         shell.run("cd","..")
+         else
+         Window("Warning","This Program is Not","a Registered BombOS","File.              ")
+         m=Window("Run "..tItems[num].."?","*Yes*","*No*")
+         if m=="1" then
+         shell.run("start")
+         shell.run("cd","..")
+         else
+         shell.run("cd","..")
+         end
+         
+         end
+        
+         end 
+         if string.find(tItems[num],".lnk",-4) then
+         local sTDir=gDir()
+         file=fs.open(sTDir.."/link.data","r")
+         sTNDir = file.readLine()
+         file.close()
+         
+         shell.run("cd",sTNDir)
+         end       
+         if string.find(tItems[num],".sys",-4) then
+         shell.run("sysfunc.data")
+         shell.run("cd","..")
+         
+         end
+                 
+                                 
+        end
+       end
+      
+       if key[1]==1 then
+       shell.run(tItems[num])
+       key=bkey
+       end
+      
+       if key[1]==2 then
+       if fs.isDir("/"..sDir.."/"..tItems[num]) then
+         if string.find(tItems[num],".exe",-4) or string.find(tItems[num],".lnk",-4) then
+           m = Window(tItems[num],"*Edit*","*Rename*","*Delete*","*Cancel*")
+          else
+           m = Window(tItems[num],"*Enter*","*Rename*","*Delete*","*Cancel*")
+         end  
+           
+           if m=="1" then
+           shell.run("cd",tItems[num])
+           end
+           if m=="2" then
+           name=input("New Name")
+           shell.run("rename",tItems[num],name)
+           end  
+           if m=="3" then
+           n=Window("Delete "..tItems[num].."?","Yes","No")
+           if n=="1" then
+           shell.run("move",tItems[num],RECYCLEBIN.."/"..tItems[num])
+           end
+           end
+           key=bkey
+         
+         
+         
+         
+         
+       
+       
+       else
+       m=Window(tItems[num],"*Edit*","*Rename*","*Delete*","*Send*","*Cancel*")
+       if m=="1" then
+       shell.run("edit",tItems[num])
+       end
+       if m=="2" then
+       name=input("New Name")
+       shell.run("rename",tItems[num],name)
+       end
+       if m=="4" then
+       Window("Click to Send")
+       shell.run("/C/BombOS/upload",sDir.."/"..tItems[num],"610")       
+       end                
+       if m=="3" then
+       n=Window("Delete "..tItems[num].."?","Yes","No")
+       if n=="1" then
+       shell.run("move",tItems[num],RECYCLEBIN.."/"..tItems[num])
+       end
+       end
+       
+       
+       key=bkey
+       end
+       end
+      
+      end
+  end
+ end 
+ end

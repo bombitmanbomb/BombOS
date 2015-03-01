@@ -1,0 +1,40 @@
+tArgs={...}
+if #tArgs ~= 2 then
+error("Usage: send 'File' 'IP'")
+end
+if fs.exists(tArgs[1])==false then
+error("File Not Found!")
+end
+IP=tonumber(tArgs[2])
+FILE=tArgs[1]
+rednet.open("right")
+sleep(1)
+rednet.send(IP,"FileSend")
+sleep(.1)
+rednet.send(IP,FILE)
+contents={}
+fle=fs.open(FILE,"r")
+line = fle.readLine()
+contents={line}
+line= fle.readLine()
+contents[#contents+1]=line 
+while line do
+line= fle.readLine() 
+contents[#contents+1]=line
+--print(line)
+end
+contents[#contents+1]="<EOF>"
+rednet.send(IP,#contents)
+sleep(1)
+
+
+for a=1,#contents do
+sleep(.1)
+term.clear()
+term.setCursorPos(1,1)
+print("Sent "..a.."/"..#contents.."kb")
+tosend = contents[a]
+rednet.send(IP,tosend)
+--print(tosend)
+end
+print("Done!")

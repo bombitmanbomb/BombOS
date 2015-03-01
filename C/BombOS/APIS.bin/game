@@ -1,0 +1,6 @@
+--[[
+Game API v1.0 by bombitmanbomb
+]]--
+function version()
+return 1.0
+end

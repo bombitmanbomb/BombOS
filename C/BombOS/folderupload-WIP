@@ -1,0 +1,69 @@
+tArgs={...}
+if #tArgs ~= 2 then
+error("Usage: send 'File' 'IP'")
+end
+if fs.exists(tArgs[1])==false then
+error("File Not Found!")
+end
+shell.run("clear")
+print("Establishing Connection...")
+IP=tonumber(tArgs[2])
+FILE=tArgs[1]
+if fs.exists("/sending") then
+shell.run("delete","/sending")
+end
+shell.run("copy",FILE,"/sending")
+
+
+
+rednet.open("right")
+sleep(1)
+attempts=0
+while attempts<=5 do
+rednet.send(IP,"FolderSend")
+ID,message=rednet.receive(5)
+if tostring(message)=="nil" then
+attempts=attempts+1
+else
+attempts=30
+end
+end
+if tostring(ID)=="nil" then
+Window("TimeOut after 30 Seconds")
+return "TIMEOUT"
+end
+if message~="FileConfirm" then
+Window("Sendign Failed!")
+return
+end
+
+
+sleep(.1)
+rednet.send(IP,FILE)
+contents={}
+fle=fs.open(FILE,"r")
+line = fle.readLine()
+contents={line}
+line= fle.readLine()
+contents[#contents+1]=line 
+while line do
+line= fle.readLine() 
+contents[#contents+1]=line
+--print(line)
+end
+contents[#contents+1]="<EOF>"
+rednet.send(IP,#contents)
+sleep(1)
+
+
+for a=1,#contents do
+sleep(.01)
+term.clear()
+term.setCursorPos(1,1)
+print("Sent "..a.."/"..#contents.."B")
+tosend = contents[a]
+rednet.send(IP,tosend)
+--print(tosend)
+end
+print("Done!")
+Window("File Sent!"," "," ","Click to Continue")

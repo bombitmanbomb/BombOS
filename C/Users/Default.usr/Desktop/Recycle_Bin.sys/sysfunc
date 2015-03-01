@@ -1,0 +1,14 @@
+a=Window("Empty Bin?","Yes","No")
+if a=="1" then
+tFiles=fs.list(RECYCLEBIN)
+for b=1,#tFiles do
+if tFiles[b]~="sysfunc" then
+shell.run("delete",RECYCLEBIN.."/"..tFiles[b])
+end
+end
+
+
+
+
+
+end

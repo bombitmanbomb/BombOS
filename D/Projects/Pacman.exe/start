@@ -1,0 +1,11 @@
+blueBack()
+m=Window("Pacman","*New Game*","*Exit Game*")
+if m=="2" then
+return
+end
+--BEGIN--
+shell.run("clear")
+local function BG()
+term.setBackgroundColor(32768)
+term.clear()
+end
