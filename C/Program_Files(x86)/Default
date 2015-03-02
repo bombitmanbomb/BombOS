@@ -1,0 +1,41 @@
+tArgs={...}
+if tostring(tArgs[1])=="nil" then
+FILENAME="file"
+else
+FILENAME=tArgs[1]
+end
+rednet.open("right")
+shell.run("clear")
+print("Waiting")
+event,IP,message = os.pullEvent("rednet_message")
+--print(IP..":"..message)
+if message == "FileSend" then
+print("Pinged. Opening Connection")
+  event,id,Name=os.pullEvent("rednet_message")
+  print("Connected")
+  event,id,Size=os.pullEvent("rednet_message")
+  print("Begenning Download...")
+  
+tempsize=0
+file=fs.open(FILENAME,"w")
+  while message~="<EOF>" do
+ -- print(message)
+  --tempsize=tempsize+1
+ -- term.setCursorPos(7,7)
+ -- print('Downloading "'..Name..'" '..tempsize.."/"..Size.."KB")
+    event,id,message = os.pullEvent("rednet_message")
+    if message~="<EOF>" then
+      if id==IP then
+        file.writeLine(message)
+        tempsize=tempsize+1
+        term.setCursorPos(7,7)
+        print('Downloading "'..Name..'" '..tempsize.."/"..Size.."KB")
+        
+     
+      end
+    end
+  end
+  file.close()
+end
+shell.run("clear")
+print(" Done!")
