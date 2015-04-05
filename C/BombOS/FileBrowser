@@ -111,7 +111,18 @@ return shell.dir()
 end
 local function items()
 local a={}
+local itemslist={}
 a = fs.list(shell.dir())
+
+for b=1,#a do
+if string.find(a[b],".",1)==1 then
+--nil
+else
+table.insert(itemslist,a[b])
+end
+
+end
+
 table.sort(a)
 return a
 end
