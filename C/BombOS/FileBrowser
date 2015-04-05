@@ -118,7 +118,7 @@ for b=1,#a do
 if string.find(a[b],".",1)==1 then
 --nil
 else
-table.insert(itemslist,a[b])
+itemslist=table.insert(itemslist,a[b])
 end
 
 end
