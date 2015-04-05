@@ -123,8 +123,8 @@ end
 
 end
 
-table.sort(a)
-return a
+table.sort(itemslist)
+return itemslist
 end
 function screen()
 local sDir = {}
