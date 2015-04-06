@@ -14,7 +14,7 @@ end
 
 shell.setPath( sPath )
 help.setPath( "/rom/help" )
-
+shell.setAlias("IDE","/C/Program_Files/IDE")
 shell.setAlias( "ls", "list" )
 shell.setAlias( "dir", "list" )
 shell.setAlias( "cp", "copy" )
