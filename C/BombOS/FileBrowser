@@ -369,7 +369,7 @@ if key[4]=="mouse_click" or key[4]=="key" then
        else
        m=Window(tItems[num],"*Edit*","*Rename*","*Delete*","*Send*","*Cancel*")
        if m=="1" then
-       shell.run("edit",tItems[num])
+       shell.run("IDE",tItems[num])
        end
        if m=="2" then
        name=input("New Name")
